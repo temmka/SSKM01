@@ -21,7 +21,7 @@ void initRTC(void);
 
 /*read 8 input pin to byte*/
 uint8_t readSlaveAddress(void);
-
+void initRTC(void);
 void pinConfig(void);
 void writeBitInReg(uint16_t reg, uint8_t bitNumber, uint8_t value);
 uint8_t readBitInReg(uint16_t reg, uint8_t bitNumber);
@@ -29,7 +29,8 @@ uint16_t tPow2(uint16_t n);
 void regBitToPin(uint16_t reg, uint8_t bitNumber, GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
 void PinToregBit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint16_t &reg, uint8_t bitNumber);
 void invPinToregBit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint16_t &reg, uint8_t bitNumber);
-
+void BitToRegBit(uint16_t &reg, uint8_t bitNumber, bool Value);
+bool regBitToBit(uint16_t reg, uint8_t bitNumber);
 uint8_t highByte(uint16_t Value);
 uint8_t lowByte(uint16_t Value);
 uint16_t _crc16_update(uint16_t crc, uint8_t a);

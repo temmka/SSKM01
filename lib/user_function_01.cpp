@@ -292,6 +292,19 @@ void regBitToPin(uint16_t reg, uint8_t bitNumber, GPIO_TypeDef* GPIOx, uint16_t 
 
 }
 
+bool regBitToBit(uint16_t reg, uint8_t bitNumber)
+{
+	if (reg & (1 << bitNumber))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+
+}
+
 void PinToregBit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint16_t &reg, uint8_t bitNumber)
 {
 
@@ -304,6 +317,24 @@ void PinToregBit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint16_t &reg, uint8_t 
 		reg &= ~(1 << bitNumber);
 	}
 }
+
+
+void BitToRegBit(uint16_t &reg, uint8_t bitNumber, bool Value)
+{
+
+	if (Value)
+	{
+		reg |= (1 << bitNumber);
+	}
+	else
+	{
+		reg &= ~(1 << bitNumber);
+	}
+}
+
+
+
+
 
 void invPinToregBit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint16_t &reg, uint8_t bitNumber)
 {
