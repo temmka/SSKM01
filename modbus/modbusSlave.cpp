@@ -121,6 +121,9 @@ int16_t modbusSlave::send_reply(uint8_t *query, uint8_t string_length) {
 	modbus_reply(query, string_length);
 	string_length += 2;
 
+
+
+
 	for (i = 0; i < string_length; i++) {
 		MODBUS_USART->DR = query[i] & 0x01FF;
 		while (!USART_GetFlagStatus(MODBUS_USART, USART_SR_TXE)) {

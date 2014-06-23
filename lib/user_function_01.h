@@ -35,7 +35,7 @@ uint8_t highByte(uint16_t Value);
 uint8_t lowByte(uint16_t Value);
 uint16_t _crc16_update(uint16_t crc, uint8_t a);
 int bitRead(uint8_t b, int bitPos);
-
+void send_USART_dma( uint8_t *buff, uint8_t size);
 
 
 
