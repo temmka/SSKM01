@@ -79,7 +79,7 @@ void initModbusTimer(void)
 
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
 
-	TimeBaseInit_Structure.TIM_Prescaler = 83;
+	TimeBaseInit_Structure.TIM_Prescaler = 20;
 	TimeBaseInit_Structure.TIM_Period = TimPeriod; // value -1; 1 = 2 mks 999 = 1000mks = 1ms
 	TimeBaseInit_Structure.TIM_ClockDivision = TIM_CKD_DIV1;
 	TimeBaseInit_Structure.TIM_CounterMode = TIM_CounterMode_Up;

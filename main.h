@@ -10,7 +10,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define MODBUS_USART              USART6
-#define MODBUS_USART_BAUDRATE    (uint16_t)19200
+#define MODBUS_USART_BAUDRATE    (uint16_t)38400
 
 #define MODBUS_USART_WORDLENGTH   USART_WordLength_8b
 #define MODBUS_USART_STOPBITS     USART_StopBits_1
@@ -50,8 +50,7 @@
 
 #define USE_COMUNICATION_LED
 #define MODBUS_LED_PORT      GPIOB
-#define MODBUS_LED_PIN       GPIO_Pin_5
-
+#define MODBUS_LED_PIN       GPIO_Pin_6
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 

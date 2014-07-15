@@ -11,7 +11,7 @@
 //Modbus Slave Variables
 extern modbusSlave mbSlave;        //in main
 extern u16 table[BUFF_SIZE];  //in main
-u8 tBuffer[BUFF_SIZE]; //in modbusSlave
+u8 tBuffer[100]; //in modbusSlave
 u16 rcvByteCounter;    //in modbusSlave
 
 
@@ -143,11 +143,14 @@ void MODBUS_USART_IRQHANDLER(void)
 {
   if (USART_GetITStatus(MODBUS_USART, USART_IT_RXNE) != RESET)
     {
-
-      USART_ClearITPendingBit(MODBUS_USART, USART_SR_RXNE);
+	    MODBUS_TIMER->CNT = 0;
+     USART_ClearITPendingBit(MODBUS_USART, USART_SR_RXNE);
+     if (rcvByteCounter<99){
       tBuffer[rcvByteCounter] = (uint8_t) MODBUS_USART->DR;
       rcvByteCounter++;
+     }
       MODBUS_TIMER->CNT = 0;
+
 
     }
 }

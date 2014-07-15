@@ -20,13 +20,13 @@ int main(void)
 	pinConfig();
 
 	//Startup blink
-	for (int i = 0; i < 10; i++)
-	{
-		delayMicroseconds(100000);
-		GPIO_ToggleBits(MODBUS_LED_PORT, MODBUS_LED_PIN);
-	}
+//	for (int i = 0; i < 10; i++)
+//	{
+//		delayMicroseconds(100);
+//		GPIO_ToggleBits(MODBUS_LED_PORT, MODBUS_LED_PIN);
+//	}
 	initRTC();
-	mbSlave.configureAddress(readSlaveAddress());
+		mbSlave.configureAddress(readSlaveAddress());
 
 
 
@@ -143,7 +143,7 @@ int main(void)
 	v4.PinCurr = GPIO_Pin_0;
 
 	v4.PortOut = GPIOB;
-	v4.PinOut = GPIO_Pin_11;
+	v4.PinOut = GPIO_Pin_5;
 
 	while (1)
 	{
@@ -153,22 +153,22 @@ int main(void)
 		v3.process(table[2]);
 		v4.process(table[3]);
 
-		invPinToregBit(GPIOC, GPIO_Pin_5, table[4], 0); //	 PC5 = POWER_1_OK_iso
-		invPinToregBit(GPIOB, GPIO_Pin_0, table[4], 1); //	 PB0 = POWER_2_OK_iso
-		PinToregBit(GPIOB, GPIO_Pin_15, table[4], 2); //	 PB15 = res_in_1
-		PinToregBit(GPIOC, GPIO_Pin_8, table[4], 3); //	 PC8  = res_in_2
-		PinToregBit(GPIOC, GPIO_Pin_9, table[4], 4); //	 PC9  = res_in_3
-		PinToregBit(GPIOA, GPIO_Pin_8, table[4], 5); //	 PA8  = res_in_4
-		PinToregBit(GPIOD, GPIO_Pin_2, table[4], 6); //	 PD2  = res_in_5
-		PinToregBit(GPIOB, GPIO_Pin_3, table[4], 7); //	 PB3  = res_in_6
+		PinToregBit(GPIOB, GPIO_Pin_15, table[4], 0); //	 PB15 = res_in_1
+		PinToregBit(GPIOC, GPIO_Pin_8, table[4], 1); //	 PC8  = res_in_2
+		PinToregBit(GPIOC, GPIO_Pin_9, table[4], 2); //	 PC9  = res_in_3
+		PinToregBit(GPIOA, GPIO_Pin_8, table[4], 3); //	 PA8  = res_in_4
+		PinToregBit(GPIOD, GPIO_Pin_2, table[4], 4); //	 PD2  = res_in_5
+		PinToregBit(GPIOB, GPIO_Pin_3, table[4], 5); //	 PB3  = res_in_6
+		PinToregBit(GPIOC, GPIO_Pin_5, table[4], 6); //	 PC5 = POWER_1_OK_iso
+		PinToregBit(GPIOB, GPIO_Pin_0, table[4], 7); //	 PB0 = POWER_2_OK_iso
 
-		regBitToPin(table[5], 0, GPIOB, GPIO_Pin_12); // PB12 = res_rel_1
-		regBitToPin(table[5], 1, GPIOB, GPIO_Pin_13); // PB13 = res_rel_2
-		regBitToPin(table[5], 2, GPIOB, GPIO_Pin_14); // PB14 = res_rel_3
-		regBitToPin(table[5], 3, GPIOB, GPIO_Pin_6);  // PB6  = res_rel_4
+		//40006 SPI Input register
+		table[5] = exp[0].AB();
 
-		//40007 SPI Input register
-		table[6] = exp[0].AB();
+		regBitToPin(table[6], 0, GPIOB, GPIO_Pin_12); // PB12 = res_rel_1
+		regBitToPin(table[6], 1, GPIOB, GPIO_Pin_13); // PB13 = res_rel_2
+		regBitToPin(table[6], 2, GPIOB, GPIO_Pin_14); // PB14 = res_rel_3
+		regBitToPin(table[6], 3, GPIOB, GPIO_Pin_6);  // PB6  = res_rel_4
 
 		//40008 SPI Output register
 		exp[1].AB(table[7]);
