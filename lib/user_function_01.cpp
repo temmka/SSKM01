@@ -305,10 +305,22 @@ bool regBitToBit(uint16_t reg, uint8_t bitNumber)
 
 }
 
-void PinToregBit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint16_t &reg, uint8_t bitNumber)
+void PinToregBit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint16_t &reg, uint8_t bitNumber,u32 &cmpVal, bool &p)
 {
+	bool t;
+
 
 	if ((GPIOx->IDR & GPIO_Pin) != (uint32_t) Bit_RESET)
+	{
+		t =1;
+	}
+	else
+	{
+		t=0;
+	}
+
+
+	if (tof(t,5, cmpVal, p ))
 	{
 		reg |= (1 << bitNumber);
 	}
@@ -316,6 +328,11 @@ void PinToregBit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint16_t &reg, uint8_t 
 	{
 		reg &= ~(1 << bitNumber);
 	}
+
+
+
+
+
 }
 
 
@@ -399,10 +416,10 @@ void delayMicroseconds(uint32_t time)
 }
 
 /* delay-on function with RTC */
-bool ton(bool input, u16 delayTime)
+bool ton(bool input, u16 delayTime, u32 cmpVal, bool p )
 {
-	static u32 cmpVal = 0; //setpoint value
-	static bool p = 0;     //one cycle var
+//	static u32 cmpVal = 0; //setpoint value
+//	static bool p = 0;     //one cycle var
 	bool out = 0;          //output signal(returned)
 
 	if (input == true) //input signal on
@@ -441,10 +458,10 @@ bool ton(bool input, u16 delayTime)
 }
 
 /* delay-off function with RTC */
-bool tof(bool input, u16 delayTime)
+bool tof(bool input, u16 delayTime, u32 &cmpVal, bool &p)
 {
-	static u32 cmpVal = 0; //setpoint value
-	static bool p = 0;     //one cycle var
+//	static u32 cmpVal = 0; //setpoint value
+//	static bool p = 0;     //one cycle var
 	bool out = 0;          //output signal(returned)
 
 	if (input == true) //input signal on

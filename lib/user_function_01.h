@@ -27,7 +27,7 @@ void writeBitInReg(uint16_t reg, uint8_t bitNumber, uint8_t value);
 uint8_t readBitInReg(uint16_t reg, uint8_t bitNumber);
 uint16_t tPow2(uint16_t n);
 void regBitToPin(uint16_t reg, uint8_t bitNumber, GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
-void PinToregBit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint16_t &reg, uint8_t bitNumber);
+void PinToregBit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint16_t &reg, uint8_t bitNumber,u32 &cmpVal, bool &p);
 void invPinToregBit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint16_t &reg, uint8_t bitNumber);
 void BitToRegBit(uint16_t &reg, uint8_t bitNumber, bool Value);
 bool regBitToBit(uint16_t reg, uint8_t bitNumber);
@@ -44,8 +44,8 @@ void send_USART_dma( uint8_t *buff, uint8_t size);
 uint16_t word(uint8_t high, uint8_t low);
 void delayMicroseconds(uint32_t time);
 
-bool ton(bool input, u16 delayTime);
-bool tof(bool input, u16 delayTime);
+bool ton(bool input, u16 delayTime, u32 cmpVal, bool p);
+bool tof(bool input, u16 delayTime, u32 &cmpVal, bool &p);
 
 bool tpulse(void);
 

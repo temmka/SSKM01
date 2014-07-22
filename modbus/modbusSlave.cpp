@@ -8,7 +8,7 @@ modbusSlave::modbusSlave() {
 	slaveAddress= 255;
 }
 ;
-//TODO Init me
+
 
 
 uint16_t modbusSlave::crc(uint8_t *buf, uint8_t start, uint8_t cnt) {

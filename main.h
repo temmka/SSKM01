@@ -48,7 +48,7 @@
 
 #define BUFF_SIZE 14 //Modbus table size
 
-#define USE_COMUNICATION_LED
+//#define USE_COMUNICATION_LED
 #define MODBUS_LED_PORT      GPIOB
 #define MODBUS_LED_PIN       GPIO_Pin_6
 

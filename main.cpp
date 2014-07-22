@@ -26,9 +26,7 @@ int main(void)
 //		GPIO_ToggleBits(MODBUS_LED_PORT, MODBUS_LED_PIN);
 //	}
 	initRTC();
-		mbSlave.configureAddress(readSlaveAddress());
-
-
+	mbSlave.configureAddress(readSlaveAddress());
 
 	/*Init SPI structure*/
 	spiPinStruct.csPORT = GPIOA;
@@ -52,29 +50,23 @@ int main(void)
 
 	/*Expander init*/
 
-		exp[0].deviceAddress = 7;
-		exp[1].deviceAddress = 0;
-		exp[2].deviceAddress = 4;
-		exp[3].deviceAddress = 2;
-		exp[4].deviceAddress = 6;
-		exp[5].deviceAddress = 1;
-		exp[6].deviceAddress = 5;
-		exp[7].deviceAddress = 3;
+	exp[0].deviceAddress = 7;
+	exp[1].deviceAddress = 0;
+	exp[2].deviceAddress = 4;
+	exp[3].deviceAddress = 2;
+	exp[4].deviceAddress = 6;
+	exp[5].deviceAddress = 1;
+	exp[6].deviceAddress = 5;
+	exp[7].deviceAddress = 3;
 
-
-
-
-
-		exp[0].spiNum = &spiExp;
-		exp[1].spiNum = &spiExp;
-		exp[2].spiNum = &spiExp;
-		exp[3].spiNum = &spiExp;
-		exp[4].spiNum = &spiExp;
-		exp[5].spiNum = &spiExp;
-		exp[6].spiNum = &spiExp;
-		exp[7].spiNum = &spiExp;
-
-
+	exp[0].spiNum = &spiExp;
+	exp[1].spiNum = &spiExp;
+	exp[2].spiNum = &spiExp;
+	exp[3].spiNum = &spiExp;
+	exp[4].spiNum = &spiExp;
+	exp[5].spiNum = &spiExp;
+	exp[6].spiNum = &spiExp;
+	exp[7].spiNum = &spiExp;
 
 	/*Flash init*/
 	Flash.spiNum = &spiFlash;
@@ -145,6 +137,28 @@ int main(void)
 	v4.PortOut = GPIOB;
 	v4.PinOut = GPIO_Pin_5;
 
+	u32 cmpVal[8] =
+	{ 0 };
+	bool p[8] =
+	{ 0 };
+
+	/* WWDG configuration */
+	/* Enable WWDG clock */
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_WWDG, ENABLE);
+
+	/* WWDG clock counter = (PCLK1 (42MHz)/4096)/8 = 1281 Hz (~780 us)  */
+	WWDG_SetPrescaler(WWDG_Prescaler_8);
+
+	/* Set Window value to 80; WWDG counter should be refreshed only when the counter
+	 is below 80 (and greater than 64) otherwise a reset will be generated */
+	WWDG_SetWindowValue(255);
+
+	/* Enable WWDG and set counter value to 127, WWDG timeout = ~780 us * 64 = 49.92 ms
+	 In this case the refresh window is:
+	 ~780 * (127-80) = 36.6ms < refresh window < ~780 * 64 = 49.9ms
+	 */
+	WWDG_Enable(255);
+
 	while (1)
 	{
 
@@ -153,14 +167,14 @@ int main(void)
 		v3.process(table[2]);
 		v4.process(table[3]);
 
-		PinToregBit(GPIOB, GPIO_Pin_15, table[4], 0); //	 PB15 = res_in_1
-		PinToregBit(GPIOC, GPIO_Pin_8, table[4], 1); //	 PC8  = res_in_2
-		PinToregBit(GPIOC, GPIO_Pin_9, table[4], 2); //	 PC9  = res_in_3
-		PinToregBit(GPIOA, GPIO_Pin_8, table[4], 3); //	 PA8  = res_in_4
-		PinToregBit(GPIOD, GPIO_Pin_2, table[4], 4); //	 PD2  = res_in_5
-		PinToregBit(GPIOB, GPIO_Pin_3, table[4], 5); //	 PB3  = res_in_6
-		PinToregBit(GPIOC, GPIO_Pin_5, table[4], 6); //	 PC5 = POWER_1_OK_iso
-		PinToregBit(GPIOB, GPIO_Pin_0, table[4], 7); //	 PB0 = POWER_2_OK_iso
+		PinToregBit(GPIOB, GPIO_Pin_15, table[4], 0, cmpVal[0], p[0]); // PB15 = res_in_1
+		PinToregBit(GPIOC, GPIO_Pin_8, table[4], 1, cmpVal[1], p[1]); //	 PC8  = res_in_2
+		PinToregBit(GPIOC, GPIO_Pin_9, table[4], 2, cmpVal[2], p[2]); //	 PC9  = res_in_3
+		PinToregBit(GPIOA, GPIO_Pin_8, table[4], 3, cmpVal[3], p[3]); //	 PA8  = res_in_4
+		PinToregBit(GPIOD, GPIO_Pin_2, table[4], 4, cmpVal[4], p[4]); //	 PD2  = res_in_5
+		PinToregBit(GPIOB, GPIO_Pin_3, table[4], 5, cmpVal[5], p[5]); //	 PB3  = res_in_6
+		PinToregBit(GPIOC, GPIO_Pin_5, table[4], 6, cmpVal[6], p[6]); //	 PC5 = POWER_1_OK_iso
+		PinToregBit(GPIOB, GPIO_Pin_0, table[4], 7, cmpVal[7], p[7]); //	 PB0 = POWER_2_OK_iso
 
 		//40006 SPI Input register
 		table[5] = exp[0].AB();
@@ -190,6 +204,8 @@ int main(void)
 
 		//40014 SPI Output register
 		exp[7].AB(table[13]);
+
+		WWDG_SetCounter(255);
 
 	} //while(1)
 
