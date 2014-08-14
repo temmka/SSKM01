@@ -305,22 +305,12 @@ bool regBitToBit(uint16_t reg, uint8_t bitNumber)
 
 }
 
-void PinToregBit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint16_t &reg, uint8_t bitNumber,u32 &cmpVal, bool &p)
+void PinToregBit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint16_t &reg, uint8_t bitNumber)
 {
-	bool t;
+
 
 
 	if ((GPIOx->IDR & GPIO_Pin) != (uint32_t) Bit_RESET)
-	{
-		t =1;
-	}
-	else
-	{
-		t=0;
-	}
-
-
-	if (tof(t,5, cmpVal, p ))
 	{
 		reg |= (1 << bitNumber);
 	}
@@ -329,12 +319,20 @@ void PinToregBit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint16_t &reg, uint8_t 
 		reg &= ~(1 << bitNumber);
 	}
 
+}
+
+void PinToregBitSet(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint16_t &reg, uint8_t bitNumber)
+{
 
 
+
+	if ((GPIOx->IDR & GPIO_Pin) != (uint32_t) Bit_RESET)
+	{
+		reg |= (1 << bitNumber);
+	}
 
 
 }
-
 
 void BitToRegBit(uint16_t &reg, uint8_t bitNumber, bool Value)
 {
@@ -573,4 +571,46 @@ void send_USART_dma( uint8_t *buff, uint8_t size)
 	DMA_Cmd(DMA2_Stream6, ENABLE);
 	USART_DMACmd(USART6, USART_DMAReq_Tx, ENABLE);
 
+}
+
+bool tof_c(bool input, u32 delayCount, u32 &cmpVal, bool &p)
+{
+
+	bool out = 0;          //output signal(returned)
+
+	if (input == true) //input signal on
+	{
+		out = true;
+		cmpVal = 0;
+		p = false;
+	} //input signal on
+
+	else //input signal off
+	{
+		if (p == false) //first cycle
+		{
+			cmpVal = 0; //set off-value
+			p = true;
+
+		} //first cycle
+
+		else //other cycle
+		{
+			if (cmpVal > delayCount)
+			{
+				out = false;
+
+
+			}
+			else
+			{
+				out = true;
+				cmpVal++;
+			}
+
+		} //other cycle
+
+	} //input signal off
+
+	return out;
 }

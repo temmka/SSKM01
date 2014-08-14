@@ -90,10 +90,10 @@ int main(void)
 	initModbusTimer();
 
 	v1.PortOpen = GPIOC;
-	v1.PinOpen = GPIO_Pin_1;
+	v1.PinOpen = GPIO_Pin_2;
 
 	v1.PortClose = GPIOC;
-	v1.PinClose = GPIO_Pin_2;
+	v1.PinClose = GPIO_Pin_1;
 
 	v1.PortCurr = GPIOC;
 	v1.PinCurr = GPIO_Pin_13;
@@ -101,11 +101,11 @@ int main(void)
 	v1.PortOut = GPIOB;
 	v1.PinOut = GPIO_Pin_1;
 
-	v2.PortOpen = GPIOC;
-	v2.PinOpen = GPIO_Pin_3;
+	v2.PortOpen = GPIOA;
+	v2.PinOpen = GPIO_Pin_0;
 
-	v2.PortClose = GPIOA;
-	v2.PinClose = GPIO_Pin_0;
+	v2.PortClose = GPIOC;
+	v2.PinClose = GPIO_Pin_3;
 
 	v2.PortCurr = GPIOC;
 	v2.PinCurr = GPIO_Pin_14;
@@ -114,10 +114,10 @@ int main(void)
 	v2.PinOut = GPIO_Pin_2;
 
 	v3.PortOpen = GPIOA;
-	v3.PinOpen = GPIO_Pin_1;
+	v3.PinOpen = GPIO_Pin_2;
 
 	v3.PortClose = GPIOA;
-	v3.PinClose = GPIO_Pin_2;
+	v3.PinClose = GPIO_Pin_1;
 
 	v3.PortCurr = GPIOC;
 	v3.PinCurr = GPIO_Pin_15;
@@ -125,11 +125,11 @@ int main(void)
 	v3.PortOut = GPIOB;
 	v3.PinOut = GPIO_Pin_10;
 
-	v4.PortOpen = GPIOA;
-	v4.PinOpen = GPIO_Pin_3;
+	v4.PortOpen = GPIOC;
+	v4.PinOpen = GPIO_Pin_4;
 
-	v4.PortClose = GPIOC;
-	v4.PinClose = GPIO_Pin_4;
+	v4.PortClose = GPIOA;
+	v4.PinClose = GPIO_Pin_3;
 
 	v4.PortCurr = GPIOC;
 	v4.PinCurr = GPIO_Pin_0;
@@ -138,9 +138,11 @@ int main(void)
 	v4.PinOut = GPIO_Pin_5;
 
 	u32 cmpVal[8] =
-	{ 0 };
+	{ 100000, 1000000, 1000000, 1000000, 1000000, 1000000, 1000000, 1000000 };
+
 	bool p[8] =
-	{ 0 };
+
+	{ 1, 1, 1, 1, 1, 1, 1, 1 };
 
 	/* WWDG configuration */
 	/* Enable WWDG clock */
@@ -161,20 +163,27 @@ int main(void)
 
 	while (1)
 	{
+        //Reset Inputs
+		if (table[0] >> 10 & 0x01)
+		{
+			table[4] = 0;
+		}
+
 
 		v1.process(table[0]);
 		v2.process(table[1]);
 		v3.process(table[2]);
 		v4.process(table[3]);
 
-		PinToregBit(GPIOB, GPIO_Pin_15, table[4], 0, cmpVal[0], p[0]); // PB15 = res_in_1
-		PinToregBit(GPIOC, GPIO_Pin_8, table[4], 1, cmpVal[1], p[1]); //	 PC8  = res_in_2
-		PinToregBit(GPIOC, GPIO_Pin_9, table[4], 2, cmpVal[2], p[2]); //	 PC9  = res_in_3
-		PinToregBit(GPIOA, GPIO_Pin_8, table[4], 3, cmpVal[3], p[3]); //	 PA8  = res_in_4
-		PinToregBit(GPIOD, GPIO_Pin_2, table[4], 4, cmpVal[4], p[4]); //	 PD2  = res_in_5
-		PinToregBit(GPIOB, GPIO_Pin_3, table[4], 5, cmpVal[5], p[5]); //	 PB3  = res_in_6
-		PinToregBit(GPIOC, GPIO_Pin_5, table[4], 6, cmpVal[6], p[6]); //	 PC5 = POWER_1_OK_iso
-		PinToregBit(GPIOB, GPIO_Pin_0, table[4], 7, cmpVal[7], p[7]); //	 PB0 = POWER_2_OK_iso
+
+		PinToregBit(GPIOB, GPIO_Pin_15, table[4], 0); // PB15 = res_in_1
+		PinToregBitSet(GPIOC, GPIO_Pin_8, table[4], 1); //	 PC8  = res_in_2
+		PinToregBitSet(GPIOC, GPIO_Pin_9, table[4], 2); //	 PC9  = res_in_3
+		PinToregBitSet(GPIOA, GPIO_Pin_8, table[4], 3); //	 PA8  = res_in_4
+		PinToregBit(GPIOD, GPIO_Pin_2, table[4], 4); //	 PD2  = res_in_5
+		PinToregBit(GPIOB, GPIO_Pin_3, table[4], 5); //	 PB3  = res_in_6
+//		PinToregBit(GPIOC, GPIO_Pin_5, table[4], 6, cmpVal[6], p[6]); //	 PC5 = POWER_1_OK_iso
+//		PinToregBit(GPIOB, GPIO_Pin_0, table[4], 7, cmpVal[7], p[7]); //	 PB0 = POWER_2_OK_iso
 
 		//40006 SPI Input register
 		table[5] = exp[0].AB();
@@ -204,6 +213,14 @@ int main(void)
 
 		//40014 SPI Output register
 		exp[7].AB(table[13]);
+
+		if ((table[4] & 0xFF) == 0x3F)
+		{
+			while (1)
+			{
+
+			}
+		}
 
 		WWDG_SetCounter(255);
 

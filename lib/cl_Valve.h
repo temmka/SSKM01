@@ -23,17 +23,17 @@ enum
 
 enum
 {
-	vMode1,
-	vMode2,
-	vFbOpen,
-	vFbClose,
-	vOpen,
-	vClose,
-	vAlOpen,   //*
-	vAlClose,  //*
-	vAlCurrent,
-	vIn,       //*
-	vReset     //*
+	vMode1=0,
+	vMode2=1,
+	vFbOpen=2,
+	vFbClose=3,
+	vOpen=4,
+	vClose=5,
+	vAlOpen=6,   //*
+	vAlClose=7,  //*
+	vAlCurrent=8,
+	vIn=9,       //*
+	vReset=10     //*
 
 };
 
@@ -46,8 +46,8 @@ public:
 
 
     std::bitset <16> breg;
-	static const u32 T1_ImpulseTime = 6;
-	static const u32 FeedbackTime = 40;
+	static const u32 T1_ImpulseTime = 10;
+	static const u32 FeedbackTime = 45;
 
 
 
@@ -63,6 +63,9 @@ public:
 	GPIO_TypeDef *PortCurr;
 	uint16_t PinCurr;
 
+	bool alOpened; //Alarm open
+	bool alClosed; //Alarm close
+	bool alCurrent; //Alarm current
 private:
 
 	u8 Model;  //1=T1, 1=T2, 2=T2;
@@ -80,9 +83,7 @@ private:
 
 	bool Run; //Bit for start alarm
 
-	bool alOpened; //Alarm open
-	bool alClosed; //Alarm close
-	bool alCurrent; //Alarm current
+
 
 };
 

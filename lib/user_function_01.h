@@ -27,7 +27,8 @@ void writeBitInReg(uint16_t reg, uint8_t bitNumber, uint8_t value);
 uint8_t readBitInReg(uint16_t reg, uint8_t bitNumber);
 uint16_t tPow2(uint16_t n);
 void regBitToPin(uint16_t reg, uint8_t bitNumber, GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
-void PinToregBit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint16_t &reg, uint8_t bitNumber,u32 &cmpVal, bool &p);
+void PinToregBit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint16_t &reg, uint8_t bitNumber);
+void PinToregBitSet(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint16_t &reg, uint8_t bitNumber);
 void invPinToregBit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint16_t &reg, uint8_t bitNumber);
 void BitToRegBit(uint16_t &reg, uint8_t bitNumber, bool Value);
 bool regBitToBit(uint16_t reg, uint8_t bitNumber);
@@ -37,7 +38,7 @@ uint16_t _crc16_update(uint16_t crc, uint8_t a);
 int bitRead(uint8_t b, int bitPos);
 void send_USART_dma( uint8_t *buff, uint8_t size);
 
-
+bool tof_c(bool input, u32 delayCount, u32 &cmpVal, bool &p);
 
 
 

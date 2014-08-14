@@ -11,7 +11,7 @@
 cl_Valve::cl_Valve()
 {
 	Model = 0;
-	tModel=0;
+	tModel = 0;
 	tFbOp = 0;
 	tFbCl = 0;
 	tImp = 0;
@@ -51,8 +51,32 @@ void cl_Valve::process(u16 &reg)
 		pRun = false;
 	}
 
-	breg[vClose] = GPIO_ReadInputDataBit(PortClose, PinClose);
-	breg[vOpen] = GPIO_ReadInputDataBit(PortOpen, PinOpen);
+
+	if (breg[vFbClose])
+	{
+		breg[vClose] = GPIO_ReadInputDataBit(PortClose, PinClose);
+	}
+	else
+	{
+		breg[vClose] = !breg[vIn];
+	}
+
+	if (breg[vFbOpen])
+	{
+		breg[vOpen] = GPIO_ReadInputDataBit(PortOpen, PinOpen);
+	}
+	else
+	{
+		breg[vOpen] = breg[vIn];
+	}
+
+	if (alOpened && breg[vOpen] ){
+		alOpened = false;
+	}
+	if (alClosed && breg[vClose] ){
+		alClosed = false;
+	}
+
 	Current = GPIO_ReadInputDataBit(PortCurr, PinCurr);
 
 	//Reset Alarm
@@ -63,7 +87,7 @@ void cl_Valve::process(u16 &reg)
 		alCurrent = false;
 		tFbCl = RTC->TR + FeedbackTime;
 		tFbOp = RTC->TR + FeedbackTime;
-		breg[vReset] = false;
+		//breg[vReset] = false;
 	}
 
 	//Start
