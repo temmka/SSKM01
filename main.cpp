@@ -177,9 +177,9 @@ int main(void)
 
 
 		PinToregBit(GPIOB, GPIO_Pin_15, table[4], 0); // PB15 = res_in_1
-		PinToregBitSet(GPIOC, GPIO_Pin_8, table[4], 1); //	 PC8  = res_in_2
-		PinToregBitSet(GPIOC, GPIO_Pin_9, table[4], 2); //	 PC9  = res_in_3
-		PinToregBitSet(GPIOA, GPIO_Pin_8, table[4], 3); //	 PA8  = res_in_4
+		PinToregBit(GPIOC, GPIO_Pin_8, table[4], 1); //	 PC8  = res_in_2
+		PinToregBit(GPIOC, GPIO_Pin_9, table[4], 2); //	 PC9  = res_in_3
+		PinToregBit(GPIOA, GPIO_Pin_8, table[4], 3); //	 PA8  = res_in_4
 		PinToregBit(GPIOD, GPIO_Pin_2, table[4], 4); //	 PD2  = res_in_5
 		PinToregBit(GPIOB, GPIO_Pin_3, table[4], 5); //	 PB3  = res_in_6
 //		PinToregBit(GPIOC, GPIO_Pin_5, table[4], 6, cmpVal[6], p[6]); //	 PC5 = POWER_1_OK_iso
